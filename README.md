@@ -10,6 +10,7 @@
   + [*Sample detection pipeline*](#sample-detection-pipeline)
   + [*License Plate tracking in video streams*](#license-plate-tracking-in-video-streams)
 * [Motivation and future plans](#motivation-and-future-plans)
+* [Train with your own data](#train-with-your-own-data)
 * [References](#references)
 
 ## Quick start
@@ -111,6 +112,24 @@ I'm planning to do the following things in future:
 [-] Upload the model
 [-] Implement license plate recognition (I'm planning to evaluate CRAFT)
 [-] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
+
+## Train with your own data
+
+By default the dataloader expects the following structure:
+* train.py
+* ./dataset
+    * ./val
+        * images
+            * {filename}.jpg
+        * masks
+            *{filename}.jpg.png
+    * ./train
+        * images
+            * {filename}.jpg
+        * masks
+            *{filename}.jpg.png
+
+Feel free to change the dataloader to your needs. The masks are expected to be a PNG using 8-bit pixels, black and white.
 
 ## References
 
