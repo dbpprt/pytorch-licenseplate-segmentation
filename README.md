@@ -84,7 +84,7 @@ The following models have been pretrained (with links to download pytorch state_
 
 |Model name|mIOU|Training dataset|
 | :- | :-: | -: |
-|[model.pth](https://tobe.done) (477MB)|82.27|Handcrafted
+|[model.pth](https://drive.google.com/file/d/1aOXJogRwrKhYrM5KStWmuHibj1hKMned/view?usp=sharing) (477MB)|82.27|Handcrafted
 
 The base weights are from [here](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/).
 
