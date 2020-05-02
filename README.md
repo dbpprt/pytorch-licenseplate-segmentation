@@ -1,2 +1,2 @@
 # License Plate Segmentation
-![Preview](examples/preview.gif)
+![Preview](examples/assets/preview.gif)
