@@ -113,7 +113,7 @@ This notebook demonstrates how you can leverage the model to overlay license pla
 It might also be an obvious usecase to extract the license plates and use the segmentation results for further license plate recognition. This notebook shows, how to extract the results.
 
 Example:
-![example_advanced_processing](/examples/advanced-processing-notebook.png)
+![example_advanced_processing](/examples/assets/advanced-processing-notebook.png)
 
 ### Training results
 ![loss](examples/assets/loss_aux_lr_250.png "Train/Test loss")
