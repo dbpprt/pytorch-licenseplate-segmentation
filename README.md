@@ -129,7 +129,7 @@ By default the dataloader expects the following structure:
         * masks
             * {filename}.jpg.png
 
-Feel free to change the dataloader to your needs. The masks are expected to be a PNG using 8-bit pixels, black and white.
+Feel free to change the dataloader to your needs. The masks are expected to be a PNG using 8-bit pixels, black and white. The training outputs a tensorboard summary to `./runs/`.
 
 ## References
 
