@@ -9,6 +9,7 @@
 * [Example notebooks](#example-notebooks)
   + [*Sample detection pipeline*](#sample-detection-pipeline)
   + [*License Plate tracking in video streams*](#license-plate-tracking-in-video-streams)
+* [Motivation and future plans](#motivation-and-future-plans)
 * [References](#references)
 
 ## Quick start
@@ -16,8 +17,7 @@
 1. Install all dependencies:
     ```bash
     # With conda - best to start in a fresh environment:
-    conda install --yes pytorch torchvision ignite cudatoolkit=10.1 -c pytorch
-    conda install --yes -c conda-forge tqdm
+    conda install --yes pytorch torchvision cudatoolkit=10.1 -c pytorch
     conda install --yes opencv
     conda install --yes matplotlib
     conda install --yes -c conda-forge tensorboard
@@ -100,3 +100,23 @@ The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epo
 ![loss](examples/assets/loss_aux_lr_250.png "Train/Test loss")
 ![iou](examples/assets/iou_aux_lr_250.png "Train/Test IOU")
 ![miou](examples/assets/miou_aux_lr_250.png "Test mIOU")
+
+## Motivation and future plans
+
+I basically started this project out of couriosity to improve my skillset. In particular I wanted to examine whether it is possible to solve an image segmentation problem with a very small dataset and I think I have been somewhat successful so far. I'm pretty new in this domain and appreciate all feedback, having that said, feel free to open as many issues as required.
+
+I'm planning to do the following things in future:
+[-] Publish the code and all the Notebooks
+[-] Write a proper README
+[-] Upload the model
+[-] Implement license plate recognition (I'm planning to evaluate CRAFT)
+[-] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
+
+## References
+
+1. Pytorch DeepLabV3 ResNet-101 implementation and weights [https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/)
+
+2. Lovasz Softmax Loss function [https://github.com/bermanmaxim/LovaszSoftmax](https://github.com/bermanmaxim/LovaszSoftmax)
+
+3. Pytorch reference implementation to train the model [https://github.com/pytorch/vision/tree/master/references/segmentation] (https://github.com/pytorch/vision/tree/master/references/segmentation)
+
