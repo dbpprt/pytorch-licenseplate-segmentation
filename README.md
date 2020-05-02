@@ -97,6 +97,12 @@ The learning process has been adapted from the original [training](https://githu
 
 The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epochs (8 hours training time) on a Windows machine with an eGPU.
 
+## Example notebooks
+### Sample detection pipeline [link](/examples/make-predictions.ipynb)
+This notebook demonstrates how you can leverage the model to make predictions on single images. 
+### License Plate tracking in video streams [link](/examples/process-video.ipynb)
+This notebook demonstrates how you can leverage the model to overlay license plates in videos. This is just an example and loads all frames into memory which is not optimal for big videos. Also there is no resizing applied, which means that you need a beefy GPU with at least 8GB of memory for HD videos.
+
 ### Training results
 ![loss](examples/assets/loss_aux_lr_250.png "Train/Test loss")
 ![iou](examples/assets/iou_aux_lr_250.png "Train/Test IOU")
@@ -107,11 +113,11 @@ The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epo
 I basically started this project out of couriosity to improve my skillset. In particular I wanted to examine whether it is possible to solve an image segmentation problem with a very small dataset and I think I have been somewhat successful so far. I'm pretty new in this domain and appreciate all feedback, having that said, feel free to open as many issues as required.
 
 I'm planning to do the following things in future:
-[-] Publish the code and all the Notebooks
-[-] Write a proper README
-[-] Upload the model
-[-] Implement license plate recognition (I'm planning to evaluate CRAFT)
-[-] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
+- [ ] Publish the code and all the Notebooks
+- [ ] Write a proper README
+- [ ] Upload the model
+- [ ] Implement license plate recognition (I'm planning to evaluate CRAFT)
+- [ ] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
 
 ## Train with your own data
 
@@ -131,6 +137,10 @@ By default the dataloader expects the following structure:
 
 Feel free to change the dataloader to your needs. The masks are expected to be a PNG using 8-bit pixels, black and white. The training outputs a tensorboard summary to `./runs/`.
 
+The data should look like this:
+
+![training_data](examples/assets/example-train-data.png "Training data example")
+
 ## References
 
 1. Pytorch DeepLabV3 ResNet-101 implementation and weights [https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/)
@@ -139,3 +149,4 @@ Feel free to change the dataloader to your needs. The masks are expected to be a
 
 3. Pytorch reference implementation to train the model [https://github.com/pytorch/vision/tree/master/references/segmentation](https://github.com/pytorch/vision/tree/master/references/segmentation)
 
+4. Example videos [https://www.pexels.com/](https://www.pexels.com/)
