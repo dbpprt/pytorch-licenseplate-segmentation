@@ -9,6 +9,7 @@
 * [Example notebooks](#example-notebooks)
   + [*Sample detection pipeline*](#sample-detection-pipeline)
   + [*License Plate tracking in video streams*](#license-plate-tracking-in-video-streams)
+  + [*Advanced processing of segmentation results*](#advances-processing-of-segmentation-results)
 * [Motivation and future plans](#motivation-and-future-plans)
 * [Train with your own data](#train-with-your-own-data)
 * [References](#references)
@@ -108,6 +109,11 @@ The attached [YouTube video](https://www.youtube.com/watch?v=WHlubxp07J4) shows 
 This notebook demonstrates how you can leverage the model to make predictions on single images. 
 ### License Plate tracking in video streams [link](/examples/process-video.ipynb)
 This notebook demonstrates how you can leverage the model to overlay license plates in videos. This is just an example and loads all frames into memory which is not optimal for big videos. Also there is no resizing applied, which means that you need a beefy GPU with at least 8GB of memory for HD videos.
+### Advanced processing of segmentation results [link](/examples/advanced-processing.ipynb)
+It might also be an obvious usecase to extract the license plates and use the segmentation results for further license plate recognition. This notebook shows, how to extract the results.
+
+Example:
+![example_advanced_processing](/examples/advanced-processing-notebook.png)
 
 ### Training results
 ![loss](examples/assets/loss_aux_lr_250.png "Train/Test loss")
