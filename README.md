@@ -101,6 +101,7 @@ The attached [YouTube video](https://www.youtube.com/watch?v=WHlubxp07J4) shows 
 - It works quite good overall, even with yellow plates (it never saw them before, the color jitter transformation did a good job)
 - It works in blurry areas (gaussian transformation applied during training)
 - It doesn't work with trucks and and vans (I should modify my training dataset accordingly to include these classes more balanced)
+- It seems to be way better in detecting license plates on the front of cars, I guess my dataset is not balanced properly
 
 ## Example notebooks
 ### Sample detection pipeline [link](/examples/make-predictions.ipynb)
