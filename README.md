@@ -118,9 +118,9 @@ This notebook demonstrates how you can leverage the model to overlay license pla
 I basically started this project out of couriosity to improve my skillset. In particular I wanted to examine whether it is possible to solve an image segmentation problem with a very small dataset and I think I have been somewhat successful so far. I'm pretty new in this domain and appreciate all feedback, having that said, feel free to open as many issues as required.
 
 I'm planning to do the following things in future:
-- [ ] Publish the code and all the Notebooks
-- [ ] Write a proper README
-- [ ] Upload the model
+- [x] Publish the code and all the Notebooks
+- [x] Write a proper README
+- [x] Upload the model
 - [ ] Implement license plate recognition (I'm planning to evaluate CRAFT)
 - [ ] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
 
