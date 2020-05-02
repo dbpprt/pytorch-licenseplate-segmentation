@@ -118,5 +118,5 @@ I'm planning to do the following things in future:
 
 2. Lovasz Softmax Loss function [https://github.com/bermanmaxim/LovaszSoftmax](https://github.com/bermanmaxim/LovaszSoftmax)
 
-3. Pytorch reference implementation to train the model [https://github.com/pytorch/vision/tree/master/references/segmentation] (https://github.com/pytorch/vision/tree/master/references/segmentation)
+3. Pytorch reference implementation to train the model [https://github.com/pytorch/vision/tree/master/references/segmentation](https://github.com/pytorch/vision/tree/master/references/segmentation)
 
