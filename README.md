@@ -122,12 +122,12 @@ By default the dataloader expects the following structure:
         * images
             * {filename}.jpg
         * masks
-            *{filename}.jpg.png
+            * {filename}.jpg.png
     * ./train
         * images
             * {filename}.jpg
         * masks
-            *{filename}.jpg.png
+            * {filename}.jpg.png
 
 Feel free to change the dataloader to your needs. The masks are expected to be a PNG using 8-bit pixels, black and white.
 
