@@ -149,7 +149,7 @@ def main(args):
         sampler=test_sampler, num_workers=args.workers,
         collate_fn=utils.collate_fn)
 
-    model = create_model()
+    model = create_model(aux_loss=True)
     model.to(device)
 
     if args.resume:
@@ -157,8 +157,8 @@ def main(args):
         model.load_state_dict(checkpoint['model'])
 
     if args.test_only:
-        confmat = evaluate(model, data_loader_test,
-                           device=device, print_freq=1)
+        evaluate(model, data_loader_test,
+                 device=device, print_freq=1)
         return
 
     params_to_optimize = [
