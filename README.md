@@ -122,7 +122,7 @@ I'm planning to do the following things in future:
 - [x] Write a proper README
 - [x] Upload the model
 - [ ] Implement license plate recognition (I'm planning to evaluate CRAFT)
-- [ ] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source version available)
+- [ ] Build a simple commandline tool to blur license plates in videos (it seems that there is no open-source tool available)
 
 ## Train with your own data
 
