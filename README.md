@@ -97,6 +97,11 @@ The learning process has been adapted from the original [training](https://githu
 
 The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epochs (8 hours training time) on a Windows machine with an eGPU.
 
+The attached [YouTube video](https://www.youtube.com/watch?v=WHlubxp07J4) shows the strength and weaknesses of the current model:
+- It works quite good overall, even with yellow plates (it never saw them before, the color jitter transformation did a good job)
+- It works in blurry areas (gaussian transformation applied during training)
+- It doesn't work with trucks and and vans (I should modify my training dataset accordingly to include these classes more balanced)
+
 ## Example notebooks
 ### Sample detection pipeline [link](/examples/make-predictions.ipynb)
 This notebook demonstrates how you can leverage the model to make predictions on single images. 
