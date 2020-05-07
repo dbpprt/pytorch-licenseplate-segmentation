@@ -1,0 +1,30 @@
+# Usage: `conda env update -f environment.yml`
+channels:
+  - conda-forge
+  - pytorch
+
+dependencies:
+  - python
+  - pip
+
+  - pytorch>=1.5.0
+  - tensorboard>=1.14
+  - torchvision>=0.6.0
+
+  - pillow
+  - opencv
+  - numpy
+  - pandas
+
+  # Jupyter
+  - matplotlib
+  - jupyter
+
+  # For dev and testing
+  - flake8
+  - pylint
+  - autopep8
+
+  - pip:
+      - mmcv
+      - pytorch-lightning

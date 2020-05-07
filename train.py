@@ -4,25 +4,26 @@ import os
 import random
 import time
 
-import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+
+import cv2
+import lovasz_losses as L
 import torch
 import torch.utils.data
 import torchvision
-from torch import nn
-from torch.utils.tensorboard import SummaryWriter
-from torchvision.transforms import ToPILImage
-
-import lovasz_losses as L
 import transforms as T
 import utils
 from dataloader import SegmentationDataset
 from model import create_model
+from swa import SWA
+from torch import nn
+from torch.utils.tensorboard import SummaryWriter
+from torchvision.transforms import ToPILImage
 
 
-def get_dataset(image_set, transform):
-    return SegmentationDataset(folder_path=os.path.join('./dataset', image_set), transforms=transform)
+def get_dataset(image_set, transform, dataset_dir):
+    return SegmentationDataset(folder_path=os.path.join(dataset_dir, image_set), transforms=transform)
 
 
 def get_transform(train):
@@ -49,7 +50,7 @@ def get_transform(train):
     return T.Compose(transforms)
 
 
-def evaluate(model, data_loader, device, epoch, writer, print_freq):
+def evaluate(model, data_loader, device, epoch = None, writer = None, print_freq = 1):
     model.eval()
 
     metric_logger = utils.MetricLogger(delimiter="  ")
@@ -70,10 +71,13 @@ def evaluate(model, data_loader, device, epoch, writer, print_freq):
             metric_logger.update(
                 loss=loss.item(), iou=iou, mIOU=np.mean(iou_list))
 
-            writer.add_scalar('loss/test', loss.item(), epoch)
-            writer.add_scalar('iou/test', iou, epoch)
+            if writer is not None:
+                writer.add_scalar('loss/test', loss.item(), epoch)
+                writer.add_scalar('iou/test', iou, epoch)
 
-    writer.add_scalar('miou/test', np.mean(iou_list), epoch)
+    if writer is not None:
+        writer.add_scalar('miou/test', np.mean(iou_list), epoch)
+
     print(f'{header} mIOU: {np.mean(iou_list)}')
 
 
@@ -90,7 +94,7 @@ def criterion(inputs, target):
     return loss + 0.5 * loss_aux, iou
 
 
-def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, device, epoch, writer, print_freq):
+def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, device, epoch, writer, print_freq, use_swa):
     model.train()
 
     metric_logger = utils.MetricLogger(delimiter="  ")
@@ -122,6 +126,9 @@ def train_one_epoch(model, criterion, optimizer, data_loader, lr_scheduler, devi
         writer.add_scalar('lr/train', optimizer.param_groups[0]["lr"], epoch)
         writer.add_scalar('iou/train', iou, epoch)
 
+    if use_swa:
+        optimizer.swap_swa_sgd()
+
 
 def main(args):
     torch.cuda.empty_cache()
@@ -133,8 +140,8 @@ def main(args):
 
     device = torch.device(args.device)
 
-    dataset = get_dataset("train", get_transform(train=True))
-    dataset_test = get_dataset("val", get_transform(train=False))
+    dataset = get_dataset("train", get_transform(train=True), args.dataset_dir)
+    dataset_test = get_dataset("val", get_transform(train=False), args.dataset_dir)
 
     train_sampler = torch.utils.data.RandomSampler(dataset)
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
@@ -149,7 +156,7 @@ def main(args):
         sampler=test_sampler, num_workers=args.workers,
         collate_fn=utils.collate_fn)
 
-    model = create_model(aux_loss=True)
+    model = create_model(aux_loss=True, freeze_backbone=args.freeze_backbone)
     model.to(device)
 
     if args.resume:
@@ -174,6 +181,9 @@ def main(args):
         params_to_optimize,
         lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
+    if args.use_swa:
+        optimizer = SWA(optimizer, swa_start=args.swa_start, swa_freq=args.swa_freq)
+
     lr_scheduler = torch.optim.lr_scheduler.LambdaLR(
         optimizer,
         lambda x: (1 - x / (len(data_loader) * args.epochs)) ** 0.9)
@@ -183,7 +193,7 @@ def main(args):
 
     for epoch in range(args.epochs):
         train_one_epoch(model, criterion, optimizer, data_loader,
-                        lr_scheduler, device, epoch, writer, args.print_freq)
+                        lr_scheduler, device, epoch, writer, args.print_freq, args.use_swa)
         evaluate(model, data_loader_test,
                  device, epoch, writer, print_freq=args.print_freq)
 
@@ -209,10 +219,10 @@ def parse_args():
 
     parser.add_argument('--device', default='cuda', help='device')
     parser.add_argument('-b', '--batch-size', default=2, type=int)
-    parser.add_argument('--epochs', default=6, type=int, metavar='N',
+    parser.add_argument('--epochs', default=30, type=int, metavar='N',
                         help='number of total epochs to run')
 
-    parser.add_argument('-j', '--workers', default=1, type=int, metavar='N',
+    parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 1)')
     parser.add_argument('--lr', default=0.001, type=float,
                         help='initial learning rate')
@@ -221,10 +231,29 @@ def parse_args():
     parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
                         metavar='W', help='weight decay (default: 1e-4)',
                         dest='weight_decay')
+    parser.add_argument('--swa-start', default=10, type=int,
+                        help='number of steps before starting to apply SWA (default 10)',
+                        dest='swa_start')
+    parser.add_argument('--swa-freq', default=5, type=int,
+                        help='number of steps between subsequent updates of SWA',
+                        dest='swa_freq')
     parser.add_argument('--print-freq', default=10,
                         type=int, help='print frequency')
+    parser.add_argument('--dataset-dir', default='./dataset', help='dataset path')
     parser.add_argument('--output-dir', default='.', help='path where to save')
     parser.add_argument('--resume', default='', help='resume from checkpoint')
+    parser.add_argument(
+        "--freeze-backbone",
+        dest="freeze_backbone",
+        help="Freeze backbone",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--swa",
+        dest="use_swa",
+        help="Use Stochastic Weight Averaging",
+        action="store_true",
+    )
     parser.add_argument(
         "--test-only",
         dest="test_only",

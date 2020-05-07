@@ -19,7 +19,7 @@
 1. Install all dependencies:
     ```bash
     # With conda - best to start in a fresh environment:
-    conda install --yes pytorch torchvision cudatoolkit=10.1 -c pytorch
+    conda install --yes pytorch torchvision cudatoolkit=10.2 -c pytorch
     conda install --yes opencv
     conda install --yes matplotlib
     conda install --yes -c conda-forge tensorboard
@@ -85,7 +85,8 @@ The following models have been pretrained (with links to download pytorch state_
 
 |Model name|mIOU|Training dataset|
 | :- | :-: | -: |
-|[model.pth](https://drive.google.com/file/d/1aOXJogRwrKhYrM5KStWmuHibj1hKMned/view?usp=sharing) (477MB)|82.27|Handcrafted
+|[model.pth](https://drive.google.com/file/d/1aOXJogRwrKhYrM5KStWmuHibj1hKMned/view?usp=sharing) (477MB)|79.51|Handcrafted
+|[model_v2.pth - new version](https://drive.google.com/file/d/1swIP6OOYYMTDWun8RdGFgBwKdpzOaXw7/view?usp=sharing) (477MB)|83.17|Handcrafted
 
 The base weights are from [here](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/).
 
@@ -95,14 +96,15 @@ The learning process has been adapted from the original [training](https://githu
 - The learning rate has been decreased to 0.001 as starting point
 - [Lovasz Softmax](https://github.com/bermanmaxim/LovaszSoftmax) has been used instead of cross entropy loss
 - More augmentations were added to the pipeline
+- SWA has been used to fine-tune the model after the training
 
-The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epochs (8 hours training time) on a Windows machine with an eGPU.
+The model has been trained on a RTX2060 Super with a batch-size of 2 for 250 Epochs (8 hours training time) on a Windows machine with an eGPU. After the training the model was fine-tuned using [Stochastic Weight Averaging](https://pytorch.org/blog/stochastic-weight-averaging-in-pytorch/) in order to generalize better (with bug success, most initial bugs disappeared).
 
-The attached [YouTube video](https://www.youtube.com/watch?v=WHlubxp07J4) shows the strength and weaknesses of the current model:
+The attached [YouTube video](https://youtu.be/vtxNOn7h3W0) shows the strength and weaknesses of the current model:
 - It works quite good overall, even with yellow plates (it never saw them before, the color jitter transformation did a good job)
 - It works in blurry areas (gaussian transformation applied during training)
-- It doesn't work with trucks and and vans (I should modify my training dataset accordingly to include these classes more balanced)
-- It seems to be way better in detecting license plates on the front of cars, I guess my dataset is not balanced properly
+- ~~It doesn't work with trucks and and vans (I should modify my training dataset accordingly to include these classes more balanced)~~
+- ~~It seems to be way better in detecting license plates on the front of cars, I guess my dataset is not balanced properly~~
 
 ## Example notebooks
 ### Sample detection pipeline [link](/examples/make-predictions.ipynb)

@@ -137,4 +137,6 @@ dmypy.json
 model.pth
 runs/
 dataset/
+dataset_old/
+models/
 .vscode/settings.json
